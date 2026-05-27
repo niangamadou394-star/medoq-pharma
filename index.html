@@ -26,6 +26,7 @@ body{height:100%;min-height:-webkit-fill-available;overflow:hidden;overflow-x:hi
 .screen{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;background:var(--white);transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .3s;will-change:transform}
 .screen.hidden{transform:translateX(100%);pointer-events:none;opacity:0}
 .screen.slide-left{transform:translateX(-30%);pointer-events:none;opacity:0}
+body.notransition .screen{transition:none !important;}
 
 .topbar{display:flex;align-items:center;padding:16px 16px 12px;background:var(--white);border-bottom:1px solid var(--mgray);flex-shrink:0;min-height:60px}
 .topbar-title{font-size:17px;font-weight:700;color:var(--black);flex:1;text-align:center}
@@ -140,7 +141,7 @@ input.no-icon,select.no-icon{padding-left:14px}
 .guard-badge{display:inline-flex;align-items:center;gap:3px;background:#FFEBEE;color:var(--red);padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700}
 </style>
 </head>
-<body>
+<body class="notransition">
 <div id="app">
 
 <!-- ══════════ LOGIN ══════════ -->
@@ -941,16 +942,28 @@ function enterPatientMode() {
   document.getElementById('profile-phone').textContent = S.user.phone;
   document.getElementById('profile-avatar').textContent = S.user.name[0].toUpperCase();
   S.screenStack = [];
-  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-  document.getElementById('screen-home').classList.remove('hidden');
+  document.querySelectorAll('.screen').forEach(s => { s.classList.add('hidden'); s.classList.remove('slide-left'); });
+  const home = document.getElementById('screen-home');
+  home.classList.remove('hidden','slide-left');
+  home.style.transform = 'none';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    home.style.transform = '';
+    document.body.classList.remove('notransition');
+  }));
   loadHome();
 }
 
 function enterPharmacyMode() {
   document.getElementById('pprofil-name').textContent = S.user.name;
   S.screenStack = [];
-  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-  document.getElementById('screen-pdash').classList.remove('hidden');
+  document.querySelectorAll('.screen').forEach(s => { s.classList.add('hidden'); s.classList.remove('slide-left'); });
+  const dash = document.getElementById('screen-pdash');
+  dash.classList.remove('hidden','slide-left');
+  dash.style.transform = 'none';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    dash.style.transform = '';
+    document.body.classList.remove('notransition');
+  }));
   loadPhDashboard();
 }
 
@@ -961,8 +974,11 @@ function doLogout() {
   localStorage.removeItem('medoq_phid');
   S.screenStack = [];
   IS_MOCK = false; updateDemoBadge();
-  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-  document.getElementById('screen-login').classList.remove('hidden');
+  document.querySelectorAll('.screen').forEach(s => { s.classList.add('hidden'); s.classList.remove('slide-left'); });
+  const login = document.getElementById('screen-login');
+  login.classList.remove('hidden','slide-left');
+  login.style.transform = 'none';
+  requestAnimationFrame(() => requestAnimationFrame(() => { login.style.transform = ''; }));
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
