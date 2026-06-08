@@ -583,6 +583,10 @@ const MOCK_PHARMACIES = [
   { id: 'ph2', name: 'Pharmacie Mer et Soleil', address: 'Rue 10 × Rue 18, Médina, Dakar', phone: '+221338921234', openingHours: '08h – 21h · 7j/7', rating: 4.5, reviewCount: 87, distance: '0.9 km', isGuard: true },
   { id: 'ph3', name: 'Pharmacie du Point E', address: 'Rue Aimé Césaire, Point E, Dakar', phone: '+221338657890', openingHours: '08h – 20h · Lun-Sam', rating: 4.6, reviewCount: 56, distance: '1.2 km', isGuard: false },
   { id: 'ph4', name: 'Pharmacie Amitié 24h', address: 'Route de Ngor, Yoff, Dakar', phone: '+221338765432', openingHours: '24h/24 · 7j/7', rating: 4.3, reviewCount: 203, distance: '2.1 km', isGuard: true },
+  { id: 'ph5', name: 'Pharmacie de la Paix', address: 'Av. Bourguiba, Plateau, Dakar', phone: '+221338221456', openingHours: '08h – 20h · Lun-Sam', rating: 4.4, reviewCount: 78, distance: '1.5 km', isGuard: false },
+  { id: 'ph6', name: 'Pharmacie Sainte Marie', address: 'Rue de Thiong, Plateau, Dakar', phone: '+221338218900', openingHours: '08h – 21h · Lun-Sam', rating: 4.7, reviewCount: 112, distance: '1.8 km', isGuard: false },
+  { id: 'ph7', name: 'Pharmacie Liberté 6', address: 'Av. Cheikh Anta Diop, Liberté 6, Dakar', phone: '+221338676543', openingHours: '08h – 22h · 7j/7', rating: 4.5, reviewCount: 95, distance: '2.4 km', isGuard: false },
+  { id: 'ph8', name: 'Pharmacie Mermoz', address: 'Av. Bourguiba, Mermoz, Dakar', phone: '+221338601234', openingHours: '24h/24 · 7j/7', rating: 4.6, reviewCount: 167, distance: '3.1 km', isGuard: true },
 ];
 
 const MOCK_STOCK_DEFAULT = {
@@ -1575,6 +1579,13 @@ function fmtDate(d) {
 // INIT
 // ═══════════════════════════════════════════════════════════════════════════
 (async () => {
+  // Désactive les transitions pendant le chargement initial (évite les glitches visuels)
+  document.body.classList.add('notransition');
+  document.getElementById('app').scrollLeft = 0;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => document.body.classList.remove('notransition'));
+  });
+
   loadCategories();
   const savedToken = localStorage.getItem('medoq_token');
   const savedUser  = localStorage.getItem('medoq_user');
