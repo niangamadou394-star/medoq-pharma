@@ -853,6 +853,8 @@ function goScreen(id, push=true) {
   if (cur && push) { cur.classList.add('slide-left'); S.screenStack.push(cur.id); }
   const next = document.getElementById(id);
   next.classList.remove('hidden','slide-left');
+  const appEl = document.getElementById('app');
+  if (appEl) appEl.scrollLeft = 0;
 }
 function goBack() {
   if (!S.screenStack.length) return;
@@ -866,6 +868,9 @@ function switchTab(tab) {
   const map = {home:'screen-home',search:'screen-search',reservations:'screen-reservations',profile:'screen-profile'};
   document.querySelectorAll('.screen').forEach(s => { s.classList.add('hidden'); s.classList.remove('slide-left'); });
   document.getElementById(map[tab]).classList.remove('hidden');
+  // Reset scroll to prevent browser auto-scroll shifting the layout
+  const appEl = document.getElementById('app');
+  if (appEl) appEl.scrollLeft = 0;
   // Update active state on all bnavs
   document.querySelectorAll('.bnav-item').forEach(b => {
     const t = b.getAttribute('onclick')?.match(/switchTab\('(\w+)'\)/)?.[1];
@@ -875,7 +880,7 @@ function switchTab(tab) {
     const inp = document.getElementById('search-input');
     inp.value='';
     document.getElementById('search-results').innerHTML='<div class="empty"><div class="emoji">💊</div><p>Tapez le nom d\'un médicament</p></div>';
-    setTimeout(()=>inp.focus(), 300);
+    setTimeout(()=>{ inp.focus(); appEl.scrollLeft = 0; }, 350);
   }
   if (tab==='reservations') loadMyResas('');
 }
@@ -884,6 +889,8 @@ function pSwitchTab(tab) {
   const map = {pdash:'screen-pdash',presas:'screen-presas',pstock:'screen-pstock',pprofil:'screen-pprofil'};
   document.querySelectorAll('.screen').forEach(s => { s.classList.add('hidden'); s.classList.remove('slide-left'); });
   document.getElementById(map[tab]).classList.remove('hidden');
+  const appEl = document.getElementById('app');
+  if (appEl) appEl.scrollLeft = 0;
   document.querySelectorAll('.bnav-item').forEach(b => {
     const t = b.getAttribute('onclick')?.match(/pSwitchTab\('(\w+)'\)/)?.[1];
     if (t) b.classList.toggle('active', t===tab);
