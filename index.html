@@ -862,6 +862,8 @@ function goBack() {
   const cur = document.querySelector('.screen:not(.hidden)');
   if (cur) cur.classList.add('hidden');
   document.getElementById(prev).classList.remove('slide-left','hidden');
+  const appEl = document.getElementById('app');
+  if (appEl) appEl.scrollLeft = 0;
 }
 function switchTab(tab) {
   S.screenStack = [];
