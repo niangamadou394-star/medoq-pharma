@@ -1,14 +1,24 @@
 {
-  "name": "Medoq",
+  "id": "/",
+  "name": "Medoq — Pharmacies de Dakar",
   "short_name": "Medoq",
-  "description": "Votre médicament. Réservé. Prêt.",
+  "description": "Trouvez et réservez vos médicaments dans les pharmacies de Dakar en quelques secondes.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#FFFFFF",
   "theme_color": "#1A7A4A",
+  "lang": "fr",
+  "categories": ["health", "medical", "lifestyle"],
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
-  ]
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "screenshots": [
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "form_factor": "narrow", "label": "Écran d'accueil Medoq" }
+  ],
+  "prefer_related_applications": false
 }

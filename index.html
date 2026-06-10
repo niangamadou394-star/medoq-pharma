@@ -139,9 +139,30 @@ input.no-icon,select.no-icon{padding-left:14px}
 .med-card-h:active{background:var(--lgray)}
 
 .guard-badge{display:inline-flex;align-items:center;gap:3px;background:#FFEBEE;color:var(--red);padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700}
+
+/* ── Bannière d'installation PWA ── */
+#install-banner{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--mgray);padding:12px 16px;display:flex;align-items:center;gap:12px;z-index:9999;box-shadow:0 -4px 16px rgba(0,0,0,.12);animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateX(-50%) translateY(100%)}to{transform:translateX(-50%) translateY(0)}}
+#install-banner .ib-icon{font-size:32px;flex-shrink:0}
+#install-banner .ib-text{flex:1}
+#install-banner .ib-title{font-weight:700;font-size:14px;color:var(--black)}
+#install-banner .ib-sub{font-size:12px;color:var(--gray);margin-top:2px}
+#install-banner .ib-btn{background:var(--green);color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+#install-banner .ib-close{background:none;border:none;font-size:20px;color:var(--gray);cursor:pointer;padding:4px;flex-shrink:0}
 </style>
+<link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body class="notransition">
+<!-- Bannière installation PWA -->
+<div id="install-banner" style="display:none">
+  <div class="ib-icon">💊</div>
+  <div class="ib-text">
+    <div class="ib-title">Installer Medoq</div>
+    <div class="ib-sub">Accès rapide depuis votre écran d'accueil</div>
+  </div>
+  <button class="ib-btn" id="install-btn">Installer</button>
+  <button class="ib-close" onclick="document.getElementById('install-banner').style.display='none'">✕</button>
+</div>
 <div id="app">
 
 <!-- ══════════ LOGIN ══════════ -->
@@ -1609,6 +1630,44 @@ function fmtDate(d) {
     } catch(_) { doLogout(); }
   }
 })();
+
+// ── Service Worker ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+
+// ── Bannière d'installation PWA ──
+let _deferredInstall = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _deferredInstall = e;
+  // Afficher la bannière 3 secondes après le chargement
+  setTimeout(() => {
+    const banner = document.getElementById('install-banner');
+    if (banner && !localStorage.getItem('medoq_install_dismissed')) {
+      banner.style.display = 'flex';
+    }
+  }, 3000);
+});
+
+document.getElementById('install-btn')?.addEventListener('click', async () => {
+  const banner = document.getElementById('install-banner');
+  if (_deferredInstall) {
+    _deferredInstall.prompt();
+    const { outcome } = await _deferredInstall.userChoice;
+    if (outcome === 'accepted') localStorage.setItem('medoq_install_dismissed', '1');
+    _deferredInstall = null;
+  }
+  if (banner) banner.style.display = 'none';
+});
+
+window.addEventListener('appinstalled', () => {
+  const banner = document.getElementById('install-banner');
+  if (banner) banner.style.display = 'none';
+  localStorage.setItem('medoq_install_dismissed', '1');
+});
 </script>
 </body>
 </html>
