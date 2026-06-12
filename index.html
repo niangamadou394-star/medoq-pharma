@@ -184,7 +184,7 @@ input.no-icon,select.no-icon{padding-left:14px}
     </div>
     <div class="btn-wrap"><button class="btn btn-primary" onclick="doLogin()">Se connecter</button></div>
     <p style="text-align:center;font-size:13px;color:var(--gray);padding:8px 16px 4px">
-      Pas encore inscrit ? <span style="color:var(--green);font-weight:600;cursor:pointer" onclick="toast('Inscription bientôt disponible')">Créer un compte</span>
+      Pas encore inscrit ? <span style="color:var(--green);font-weight:600;cursor:pointer" onclick="goRegister()">Créer un compte</span>
     </p>
     <p style="text-align:center;font-size:12px;color:var(--mgray);padding:20px 16px 0">
       Démo : patient (+221770000001) · pharmacie (+221770000002)
@@ -192,12 +192,130 @@ input.no-icon,select.no-icon{padding-left:14px}
   </div>
 </div>
 
+<!-- ══════════ INSCRIPTION ══════════ -->
+<div class="screen hidden" id="screen-register">
+  <div class="topbar">
+    <button class="topbar-btn" onclick="goBack()">‹</button>
+    <div class="topbar-title">Créer un compte</div>
+    <div style="width:36px"></div>
+  </div>
+  <div class="scroll" style="padding:16px">
+    <div class="login-role" style="margin-bottom:20px">
+      <button class="role-btn active" id="reg-role-patient" onclick="setRegRole('patient')">👤 Patient</button>
+      <button class="role-btn" id="reg-role-pharma" onclick="setRegRole('pharmacie')">🏥 Pharmacie</button>
+    </div>
+    <div class="input-wrap"><span class="icon">👤</span>
+      <input type="text" id="reg-name" placeholder="Prénom et nom">
+    </div>
+    <div class="input-wrap"><span class="icon">📱</span>
+      <input type="tel" id="reg-phone" placeholder="Numéro de téléphone (+221...)">
+    </div>
+    <div class="input-wrap"><span class="icon">🔒</span>
+      <input type="password" id="reg-pass" placeholder="Mot de passe (8 caractères min.)">
+    </div>
+    <div class="input-wrap"><span class="icon">🔒</span>
+      <input type="password" id="reg-pass2" placeholder="Confirmer le mot de passe">
+    </div>
+    <div id="reg-pharma-fields" style="display:none">
+      <div class="input-wrap"><span class="icon">🏥</span>
+        <input type="text" id="reg-phname" placeholder="Nom de la pharmacie">
+      </div>
+      <div class="input-wrap"><span class="icon">📍</span>
+        <input type="text" id="reg-phaddr" placeholder="Adresse complète">
+      </div>
+    </div>
+    <div class="btn-wrap" style="margin-top:8px">
+      <button class="btn btn-primary" onclick="doRegister()">Créer mon compte</button>
+    </div>
+    <p style="text-align:center;font-size:13px;color:var(--gray);padding:12px 0">
+      Déjà inscrit ? <span style="color:var(--green);font-weight:600;cursor:pointer" onclick="goBack()">Se connecter</span>
+    </p>
+  </div>
+</div>
+
+<!-- ══════════ MODIFIER PROFIL ══════════ -->
+<div class="screen hidden" id="screen-edit-profile">
+  <div class="topbar">
+    <button class="topbar-btn" onclick="goBack()">‹</button>
+    <div class="topbar-title">Modifier mon profil</div>
+    <div style="width:36px"></div>
+  </div>
+  <div class="scroll" style="padding:16px">
+    <div style="text-align:center;padding:24px 0 16px">
+      <div class="avatar" style="width:80px;height:80px;font-size:32px;margin:0 auto 12px">✏️</div>
+    </div>
+    <div class="input-wrap"><span class="icon">👤</span>
+      <input type="text" id="ep-name" placeholder="Prénom et nom / Nom de la pharmacie">
+    </div>
+    <div class="input-wrap"><span class="icon">📱</span>
+      <input type="tel" id="ep-phone" placeholder="Numéro de téléphone">
+    </div>
+    <div class="input-wrap"><span class="icon">✉️</span>
+      <input type="email" id="ep-email" placeholder="Email (optionnel)">
+    </div>
+    <div id="ep-addr-wrap" style="display:none">
+      <div class="input-wrap"><span class="icon">📍</span>
+        <input type="text" id="ep-addr" placeholder="Adresse de la pharmacie">
+      </div>
+    </div>
+    <div class="divider" style="margin:16px 0"></div>
+    <div style="font-size:13px;font-weight:700;color:var(--gray);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px">Changer le mot de passe</div>
+    <div class="input-wrap"><span class="icon">🔒</span>
+      <input type="password" id="ep-pass" placeholder="Nouveau mot de passe (laisser vide = inchangé)">
+    </div>
+    <div class="input-wrap"><span class="icon">🔒</span>
+      <input type="password" id="ep-pass2" placeholder="Confirmer le nouveau mot de passe">
+    </div>
+    <div class="btn-wrap" style="margin-top:8px">
+      <button class="btn btn-primary" onclick="saveProfile()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ HORAIRES D'OUVERTURE ══════════ -->
+<div class="screen hidden" id="screen-horaires">
+  <div class="topbar">
+    <button class="topbar-btn" onclick="goBack()">‹</button>
+    <div class="topbar-title">Horaires d'ouverture</div>
+    <div style="width:36px"></div>
+  </div>
+  <div class="scroll" style="padding:16px">
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-body" style="padding:0">
+        <div id="horaires-rows"></div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--gray);text-align:center">Appuyez sur un horaire pour le modifier</p>
+    <div class="btn-wrap"><button class="btn btn-primary" onclick="saveHoraires()">Enregistrer</button></div>
+  </div>
+</div>
+
+<!-- ══════════ STATISTIQUES AVANCÉES ══════════ -->
+<div class="screen hidden" id="screen-stats">
+  <div class="topbar">
+    <button class="topbar-btn" onclick="goBack()">‹</button>
+    <div class="topbar-title">Statistiques</div>
+    <div style="width:36px"></div>
+  </div>
+  <div class="scroll" style="padding:16px" id="stats-body"></div>
+</div>
+
+<!-- ══════════ DÉTAIL RÉSERVATION ══════════ -->
+<div class="screen hidden" id="screen-resa-detail">
+  <div class="topbar">
+    <button class="topbar-btn" onclick="goBack()">‹</button>
+    <div class="topbar-title">Réservation</div>
+    <div style="width:36px"></div>
+  </div>
+  <div class="scroll" id="resa-detail-body" style="padding:16px 16px 32px"></div>
+</div>
+
 <!-- ══════════ PATIENT — HOME ══════════ -->
 <div class="screen hidden" id="screen-home">
   <div class="topbar">
     <div class="topbar-logo">Med<span>oq</span></div>
     <div style="display:flex;gap:8px">
-      <button class="topbar-btn" id="notif-btn" onclick="openNotifs()">🔔</button>
+      <button class="topbar-btn" id="notif-btn" onclick="openNotifs()" style="position:relative">🔔<span id="notif-badge" style="display:none;position:absolute;top:2px;right:2px;width:8px;height:8px;background:var(--red);border-radius:50%;border:1.5px solid #fff"></span></button>
       <button class="topbar-btn" onclick="switchTab('profile')">👤</button>
     </div>
   </div>
@@ -412,7 +530,7 @@ input.no-icon,select.no-icon{padding-left:14px}
     <div class="divider"></div>
     <div class="section-label">Mon compte</div>
     <div class="card">
-      <div class="card-row" onclick="toast('Bientôt disponible')"><span style="margin-right:12px">✏️</span> Modifier mon profil <span style="margin-left:auto;color:var(--gray)">›</span></div>
+      <div class="card-row" onclick="openEditProfile()"><span style="margin-right:12px">✏️</span> Modifier mon profil <span style="margin-left:auto;color:var(--gray)">›</span></div>
       <div class="card-row" onclick="openNotifs()"><span style="margin-right:12px">🔔</span> Notifications <span style="margin-left:auto;color:var(--gray)">›</span></div>
       <div class="card-row" onclick="toast('Bientôt disponible')"><span style="margin-right:12px">🔒</span> Sécurité <span style="margin-left:auto;color:var(--gray)">›</span></div>
     </div>
@@ -515,9 +633,9 @@ input.no-icon,select.no-icon{padding-left:14px}
     </div>
     <div class="divider"></div>
     <div class="card" style="margin-top:12px">
-      <div class="card-row" onclick="toast('Bientôt disponible')"><span style="margin-right:12px">✏️</span> Modifier le profil <span style="margin-left:auto;color:var(--gray)">›</span></div>
-      <div class="card-row" onclick="toast('Bientôt disponible')"><span style="margin-right:12px">🕐</span> Horaires d'ouverture <span style="margin-left:auto;color:var(--gray)">›</span></div>
-      <div class="card-row" onclick="toast('Bientôt disponible')"><span style="margin-right:12px">📊</span> Statistiques avancées <span style="margin-left:auto;color:var(--gray)">›</span></div>
+      <div class="card-row" onclick="openEditProfile()"><span style="margin-right:12px">✏️</span> Modifier le profil <span style="margin-left:auto;color:var(--gray)">›</span></div>
+      <div class="card-row" onclick="openHoraires()"><span style="margin-right:12px">🕐</span> Horaires d'ouverture <span style="margin-left:auto;color:var(--gray)">›</span></div>
+      <div class="card-row" onclick="openStats()"><span style="margin-right:12px">📊</span> Statistiques avancées <span style="margin-left:auto;color:var(--gray)">›</span></div>
     </div>
     <div class="btn-wrap" style="padding-top:8px"><button class="btn btn-outline" onclick="doLogout()">Se déconnecter</button></div>
   </div>
@@ -984,6 +1102,7 @@ function enterPatientMode() {
     home.style.transform = '';
     document.body.classList.remove('notransition');
   }));
+  updateNotifBadge();
   loadHome();
 }
 
@@ -1152,6 +1271,131 @@ function loadNotifs() {
       ${n.unread?'<div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:6px"></div>':''}`;
     el.appendChild(div);
   });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// NOTIFICATION BADGE
+// ═══════════════════════════════════════════════════════════════════════════
+function updateNotifBadge() {
+  const badge = document.getElementById('notif-badge');
+  if (!badge) return;
+  const hasUnread = MOCK_NOTIFS.some(n => n.unread);
+  badge.style.display = hasUnread ? 'block' : 'none';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// REGISTRATION
+// ═══════════════════════════════════════════════════════════════════════════
+function goRegister() {
+  // reset form fields
+  ['reg-name','reg-phone','reg-pass','reg-pass2','reg-phname','reg-phaddr'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  setRegRole('patient');
+  goScreen('screen-register');
+}
+
+function setRegRole(role) {
+  document.getElementById('reg-role-patient').classList.toggle('active', role === 'patient');
+  document.getElementById('reg-role-pharma').classList.toggle('active', role === 'pharmacie');
+  document.getElementById('reg-pharma-fields').style.display = role === 'pharmacie' ? '' : 'none';
+  document.getElementById('screen-register').dataset.role = role;
+}
+
+function doRegister() {
+  const role = document.getElementById('screen-register').dataset.role || 'patient';
+  const name  = document.getElementById('reg-name').value.trim();
+  const phone = document.getElementById('reg-phone').value.trim();
+  const pass  = document.getElementById('reg-pass').value;
+  const pass2 = document.getElementById('reg-pass2').value;
+
+  if (!name)  { toast('⚠️ Entrez votre prénom et nom'); return; }
+  if (!phone) { toast('⚠️ Entrez votre numéro de téléphone'); return; }
+  if (pass.length < 8) { toast('⚠️ Mot de passe trop court (8 caractères min.)'); return; }
+  if (pass !== pass2)  { toast('⚠️ Les mots de passe ne correspondent pas'); return; }
+
+  if (role === 'pharmacie') {
+    const phname = document.getElementById('reg-phname').value.trim();
+    const phaddr = document.getElementById('reg-phaddr').value.trim();
+    if (!phname) { toast('⚠️ Entrez le nom de la pharmacie'); return; }
+    if (!phaddr) { toast('⚠️ Entrez l\'adresse de la pharmacie'); return; }
+    // Align to the same structure as doLogin() creates
+    S.user = { id: 'local-' + Date.now(), name, phone, role: 'PHARMACY_STAFF', phname, phaddr };
+    S.pharmacyId = 'ph-local';
+    S.pharmacy = { name: phname, address: phaddr, phone };
+    S.token = 'mock-local';
+  } else {
+    S.user = { id: 'local-' + Date.now(), name, phone, role: 'PATIENT' };
+    S.token = 'mock-local';
+  }
+
+  IS_MOCK = true; updateDemoBadge();
+  try {
+    localStorage.setItem('medoq_user', JSON.stringify(S.user));
+    localStorage.setItem('medoq_token', S.token);
+  } catch(_) {}
+  toast('✅ Compte créé avec succès !');
+
+  // navigate to the right home
+  setTimeout(() => {
+    if (S.user.role === 'PHARMACY_STAFF') enterPharmacyMode();
+    else enterPatientMode();
+    updateNotifBadge();
+  }, 800);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// EDIT PROFILE
+// ═══════════════════════════════════════════════════════════════════════════
+function openEditProfile() {
+  const u = S.user || {};
+  const el = id => document.getElementById(id);
+
+  if (u.role === 'PHARMACY_STAFF') {
+    el('ep-name').value  = u.phname  || S.pharmacy?.name  || u.name || '';
+    el('ep-phone').value = u.phone   || S.pharmacy?.phone || '';
+    el('ep-addr').value  = u.phaddr  || S.pharmacy?.address || '';
+    el('ep-email').value = u.email   || '';
+    // show address row for pharmacies
+    const addrRow = document.getElementById('ep-addr-wrap');
+    if (addrRow) addrRow.style.display = '';
+  } else {
+    el('ep-name').value  = u.name  || '';
+    el('ep-phone').value = u.phone || '';
+    el('ep-email').value = u.email || '';
+    const addrRow = document.getElementById('ep-addr-wrap');
+    if (addrRow) addrRow.style.display = 'none';
+  }
+  goScreen('screen-edit-profile');
+}
+
+function saveProfile() {
+  const u = S.user || {};
+  const name  = document.getElementById('ep-name').value.trim();
+  const phone = document.getElementById('ep-phone').value.trim();
+  const email = document.getElementById('ep-email').value.trim();
+
+  if (!name)  { toast('⚠️ Le nom est requis'); return; }
+  if (!phone) { toast('⚠️ Le téléphone est requis'); return; }
+
+  if (u.role === 'PHARMACY_STAFF') {
+    const addr  = document.getElementById('ep-addr').value.trim();
+    S.user = { ...S.user, name, phone, email, phname: name, phaddr: addr };
+    S.pharmacy = { ...S.pharmacy, name, phone, address: addr };
+    // refresh pharmacy header label
+    const ppn = document.getElementById('pprofil-name');
+    if (ppn) ppn.textContent = name;
+  } else {
+    S.user = { ...S.user, name, phone, email };
+    // refresh patient header labels
+    const hn = document.getElementById('home-name');   if (hn) hn.textContent = name;
+    const pn = document.getElementById('profile-name'); if (pn) pn.textContent = name;
+    const av = document.getElementById('profile-avatar'); if (av) av.textContent = name[0].toUpperCase();
+  }
+  try { localStorage.setItem('medoq_user', JSON.stringify(S.user)); } catch(_) {}
+  toast('✅ Profil mis à jour');
+  goBack();
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1347,6 +1591,8 @@ function filterResas(btn, status) {
 
 function buildResaCard(r) {
   const div = document.createElement('div'); div.className = 'resa-card';
+  div.style.cursor = 'pointer';
+  div.onclick = (e) => { if (!e.target.closest('button')) openResaDetail(r); };
   const statusMap = {CONFIRMED:{lbl:'Confirmée',cls:'badge-green'},READY:{lbl:'Prête ✓',cls:'badge-blue'},COMPLETED:{lbl:'Terminée',cls:'badge-gray'},CANCELLED:{lbl:'Annulée',cls:'badge-red'}};
   const s = statusMap[r.status]||{lbl:r.status,cls:'badge-gray'};
   div.innerHTML = `
@@ -1363,6 +1609,35 @@ function buildResaCard(r) {
     ${r.status==='READY'?`<div style="margin:0 16px 12px;padding:10px 12px;background:var(--ltgreen);border-radius:var(--radius-sm);font-size:13px;color:var(--dkgreen);display:flex;align-items:center;gap:8px">✅ <strong>Prêt à récupérer !</strong> Rendez-vous à la pharmacie.</div>`:''}
     ${r.status==='CONFIRMED'||r.status==='READY'?`<div class="resa-footer"><button class="btn btn-outline btn-sm" onclick="cancelResa('${r.id}',this)">Annuler</button></div>`:''}`;
   return div;
+}
+
+function openResaDetail(r) {
+  const statusMap = {CONFIRMED:{lbl:'Confirmée',cls:'badge-green',icon:'✅'},READY:{lbl:'Prête à récupérer',cls:'badge-blue',icon:'🎉'},COMPLETED:{lbl:'Terminée',cls:'badge-gray',icon:'✓'},CANCELLED:{lbl:'Annulée',cls:'badge-red',icon:'✕'}};
+  const s = statusMap[r.status]||{lbl:r.status,cls:'badge-gray',icon:'📋'};
+  const pmMap = {WAVE:'💙 Wave',ORANGE_MONEY:'🟠 Orange Money',CASH:'💵 Cash'};
+  document.getElementById('resa-detail-body').innerHTML = `
+    <div style="text-align:center;padding:24px 0 16px">
+      <div style="font-size:56px;margin-bottom:8px">${s.icon}</div>
+      <span class="badge ${s.cls}" style="font-size:14px;padding:6px 16px">${s.lbl}</span>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div style="font-size:22px;font-weight:900;color:var(--green);text-align:center;letter-spacing:1.5px;margin-bottom:16px">${r.refNumber}</div>
+        <div style="display:grid;gap:10px">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--gray);font-size:13px">Médicament</span><span style="font-weight:700;font-size:13px">${r.medicationName}</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--gray);font-size:13px">Pharmacie</span><span style="font-weight:700;font-size:13px;text-align:right;max-width:60%">${r.pharmacyName}</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--gray);font-size:13px">Quantité</span><span style="font-weight:700;font-size:13px">${r.quantity}</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--gray);font-size:13px">Paiement</span><span style="font-weight:700;font-size:13px">${pmMap[r.paymentMethod]||r.paymentMethod}</span></div>
+          <div style="height:1px;background:var(--lgray)"></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--gray);font-size:13px">Total</span><span style="font-weight:900;font-size:18px;color:var(--green)">${fmtFCFA(r.totalAmount)}</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--gray);font-size:13px">Date</span><span style="font-size:13px">${fmtDate(r.createdAt)}</span></div>
+        </div>
+      </div>
+    </div>
+    ${r.status==='READY'?`<div style="padding:16px 0 0;padding:16px;background:var(--ltgreen);border-radius:var(--radius);margin-top:8px;text-align:center;color:var(--dkgreen)"><div style="font-size:20px;margin-bottom:4px">🏥</div><strong>Votre médicament est prêt !</strong><div style="font-size:13px;margin-top:4px">Présentez ce code à la pharmacie.</div></div>`:''}
+    ${r.status==='CONFIRMED'?`<div class="btn-wrap" style="margin-top:16px"><button class="btn btn-outline" style="border-color:var(--red);color:var(--red)" onclick="cancelResa('${r.id}',this);goBack()">Annuler la réservation</button></div>`:''}
+  `;
+  goScreen('screen-resa-detail');
 }
 
 async function cancelResa(id, btn) {
@@ -1603,6 +1878,129 @@ function fmtFCFA(n) { return new Intl.NumberFormat('fr-SN').format(Math.round(n)
 function fmtDate(d) {
   if (!d) return '—';
   return new Intl.DateTimeFormat('fr-SN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(d));
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PHARMACY — HORAIRES D'OUVERTURE
+// ═══════════════════════════════════════════════════════════════════════════
+const DEFAULT_HORAIRES = {
+  Lundi:    { open: '08:00', close: '20:00', closed: false },
+  Mardi:    { open: '08:00', close: '20:00', closed: false },
+  Mercredi: { open: '08:00', close: '20:00', closed: false },
+  Jeudi:    { open: '08:00', close: '20:00', closed: false },
+  Vendredi: { open: '08:00', close: '20:00', closed: false },
+  Samedi:   { open: '08:00', close: '18:00', closed: false },
+  Dimanche: { open: '09:00', close: '13:00', closed: true  },
+};
+
+function openHoraires() {
+  let h;
+  try { h = JSON.parse(localStorage.getItem('medoq_horaires') || 'null') || DEFAULT_HORAIRES; }
+  catch(_) { h = DEFAULT_HORAIRES; }
+  const el = document.getElementById('horaires-rows');
+  el.innerHTML = '';
+  Object.entries(h).forEach(([day, v]) => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border)';
+    row.innerHTML = `
+      <div style="width:80px;font-size:14px;font-weight:600;color:var(--black)">${day}</div>
+      <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--gray);flex-shrink:0">
+        <input type="checkbox" data-day="${day}" class="hor-closed" ${v.closed?'checked':''} style="accent-color:var(--green)"> Fermé
+      </label>
+      <div style="flex:1;display:flex;align-items:center;gap:6px;justify-content:flex-end" id="hor-times-${day}">
+        <input type="time" class="hor-open" data-day="${day}" value="${v.open}" style="font-size:13px;border:1px solid var(--border);border-radius:6px;padding:4px 6px;width:90px;${v.closed?'opacity:.3;pointer-events:none':''}">
+        <span style="font-size:12px;color:var(--gray)">→</span>
+        <input type="time" class="hor-close" data-day="${day}" value="${v.close}" style="font-size:13px;border:1px solid var(--border);border-radius:6px;padding:4px 6px;width:90px;${v.closed?'opacity:.3;pointer-events:none':''}">
+      </div>`;
+    el.appendChild(row);
+    // toggle closed
+    row.querySelector('.hor-closed').addEventListener('change', function() {
+      const wrap = document.getElementById('hor-times-' + this.dataset.day);
+      wrap.querySelectorAll('input[type=time]').forEach(i => {
+        i.style.opacity = this.checked ? '.3' : '1';
+        i.style.pointerEvents = this.checked ? 'none' : '';
+      });
+    });
+  });
+  goScreen('screen-horaires');
+}
+
+function saveHoraires() {
+  const h = {};
+  document.querySelectorAll('.hor-closed').forEach(cb => {
+    const day = cb.dataset.day;
+    const openEl  = document.querySelector(`.hor-open[data-day="${day}"]`);
+    const closeEl = document.querySelector(`.hor-close[data-day="${day}"]`);
+    h[day] = { open: openEl.value, close: closeEl.value, closed: cb.checked };
+  });
+  try { localStorage.setItem('medoq_horaires', JSON.stringify(h)); } catch(_){}
+  toast('✅ Horaires enregistrés');
+  goBack();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PHARMACY — STATISTIQUES AVANCÉES
+// ═══════════════════════════════════════════════════════════════════════════
+function openStats() {
+  const resas = getMockResas();
+  const myResas = resas; // in demo mode, show all
+  const total   = myResas.length;
+  const done    = myResas.filter(r => r.status === 'COMPLETED').length;
+  const pending = myResas.filter(r => ['CONFIRMED','READY'].includes(r.status)).length;
+  const cancelled = myResas.filter(r => r.status === 'CANCELLED').length;
+  const revenue = myResas.filter(r => r.status === 'COMPLETED').reduce((s,r) => s + (r.total||0), 0);
+
+  // group by day for mini chart
+  const byDay = {};
+  myResas.forEach(r => {
+    const d = (r.createdAt||'').slice(0,10);
+    if (d) byDay[d] = (byDay[d]||0) + 1;
+  });
+  const days = Object.keys(byDay).sort().slice(-7);
+  const maxV = Math.max(...days.map(d=>byDay[d]), 1);
+
+  const barChart = days.map(d => {
+    const pct = Math.round((byDay[d]/maxV)*100);
+    const label = new Date(d).toLocaleDateString('fr-SN',{weekday:'short'});
+    return `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+      <div style="font-size:11px;color:var(--gray)">${byDay[d]}</div>
+      <div style="width:100%;background:var(--green);border-radius:4px 4px 0 0;height:${pct}px;max-height:80px;min-height:4px;transition:height .4s"></div>
+      <div style="font-size:10px;color:var(--gray)">${label}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('stats-body').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+      <div class="card"><div class="card-body" style="text-align:center">
+        <div style="font-size:28px;font-weight:800;color:var(--green)">${total}</div>
+        <div style="font-size:12px;color:var(--gray);margin-top:4px">Réservations totales</div>
+      </div></div>
+      <div class="card"><div class="card-body" style="text-align:center">
+        <div style="font-size:28px;font-weight:800;color:var(--blue)">${pending}</div>
+        <div style="font-size:12px;color:var(--gray);margin-top:4px">En attente</div>
+      </div></div>
+      <div class="card"><div class="card-body" style="text-align:center">
+        <div style="font-size:28px;font-weight:800;color:#4CAF50">${done}</div>
+        <div style="font-size:12px;color:var(--gray);margin-top:4px">Complétées</div>
+      </div></div>
+      <div class="card"><div class="card-body" style="text-align:center">
+        <div style="font-size:28px;font-weight:800;color:var(--red)">${cancelled}</div>
+        <div style="font-size:12px;color:var(--gray);margin-top:4px">Annulées</div>
+      </div></div>
+    </div>
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-body">
+        <div style="font-size:13px;font-weight:700;color:var(--gray);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Chiffre d'affaires</div>
+        <div style="font-size:26px;font-weight:800;color:var(--green)">${fmtFCFA(revenue)}</div>
+        <div style="font-size:12px;color:var(--gray)">Réservations complétées uniquement</div>
+      </div>
+    </div>
+    ${days.length ? `<div class="card"><div class="card-body">
+      <div style="font-size:13px;font-weight:700;color:var(--gray);margin-bottom:16px;text-transform:uppercase;letter-spacing:.5px">Activité (7 derniers jours)</div>
+      <div style="display:flex;align-items:flex-end;gap:6px;height:90px">${barChart}</div>
+    </div></div>` : ''}
+  `;
+  goScreen('screen-stats');
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
