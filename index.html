@@ -23,6 +23,17 @@ html{height:100%;height:-webkit-fill-available;overflow-x:hidden;width:100%}
 body{height:100%;min-height:-webkit-fill-available;overflow:hidden;overflow-x:hidden;width:100%;font-family:var(--font);background:#F0F4F1;color:var(--black)}
 #app{height:100vh;height:100dvh;display:flex;flex-direction:column;width:100%;max-width:480px;margin:0 auto;background:var(--white);position:relative;overflow:hidden;box-shadow:0 0 40px rgba(0,0,0,.1)}
 
+/* ── Desktop : phone frame centré sur fond dégradé ── */
+@media(min-width:520px){
+  html,body{height:100%;overflow:hidden}
+  body{background:linear-gradient(145deg,#1A7A4A 0%,#0e4d2e 100%);display:flex;align-items:center;justify-content:center}
+  #app{height:92vh;max-height:860px;border-radius:44px;box-shadow:0 40px 100px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.08)}
+  /* Barre de retour vers la landing page */
+  #desktop-back{display:flex}
+}
+#desktop-back{display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:9999;background:rgba(255,255,255,.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.25);border-radius:30px;padding:8px 18px;color:#fff;font-size:13px;font-weight:600;gap:8px;align-items:center;cursor:pointer;text-decoration:none;white-space:nowrap}
+#desktop-back:hover{background:rgba(255,255,255,.25)}
+
 .screen{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;background:var(--white);transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .3s;will-change:transform}
 .screen.hidden{transform:translateX(100%);pointer-events:none;opacity:0}
 .screen.slide-left{transform:translateX(-30%);pointer-events:none;opacity:0}
@@ -163,6 +174,7 @@ input.no-icon,select.no-icon{padding-left:14px}
   <button class="ib-btn" id="install-btn">Installer</button>
   <button class="ib-close" onclick="document.getElementById('install-banner').style.display='none'">✕</button>
 </div>
+<a id="desktop-back" href="landing.html">← Retour au site</a>
 <div id="app">
 
 <!-- ══════════ LOGIN ══════════ -->
