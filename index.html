@@ -972,7 +972,7 @@ async function api(method, path, body) {
     if (IS_MOCK) { IS_MOCK = false; updateDemoBadge(); }
     return res;
   } catch(e) {
-    const isNet = e.name==='TypeError' || e.name==='AbortError';
+    const isNet = e.name==='TypeError' || e.name==='AbortError' || e.name==='SyntaxError';
     if (isNet) {
       IS_MOCK = true; updateDemoBadge();
       return apiMock(method, path, body);
